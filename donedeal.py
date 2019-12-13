@@ -28,6 +28,16 @@ for container in containers:
 	description_container = container.findAll("p", {"class":"card__body-title"})
 	description = description_container[0].text
 
+	# THE NEXT 3 CONTAINERS ARE TO BE PULLED FROM THESE <li>'s (example HTML from webpage shown below). 
+	# I CAN'T USE THE REACT ID AS THIS IS DIFFERENT FOR EACH CAR ON THE WEBPAGE
+		# <ul class="card__body-keyinfo" data-reactid="18">
+	 #   <li data-reactid="19">2016</li>
+	 #   <li data-reactid="20">2.0 Diesel</li>
+	 #   <li data-reactid="21">115,000 mi</li>
+	 #   <li data-reactid="22">1 day</li>
+	 #   <li data-reactid="23">Donegal</li>
+		# </ul>
+
 	milage_container = container.findAll("ul", {"class":"card__body-keyinfo"})
 	milage = milage_container[0].text
 
