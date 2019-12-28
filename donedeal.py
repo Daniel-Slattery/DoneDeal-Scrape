@@ -15,7 +15,7 @@ uClient.close()
 #html parsing
 page_soup = soup(page_html, "html.parser")
 
-# grab each product
+# grab each car on page
 containers = page_soup.findAll("div",{"class":"card__body"})
 
 filename = "cars.csv"
@@ -27,31 +27,29 @@ f.write(headers)
 
 for container in containers:
 
+# If ul class="card__body-keyinfo" inside card then execute
+# (avoid scanning through empty ads on page)
 	description_container = container.findAll("p", {"class":"card__body-title"})
 	description = description_container[0].text
 
-	# THE NEXT 3 CONTAINERS ARE TO BE PULLED FROM THESE <li>'s (example HTML from webpage shown below). 
-	# I CAN'T USE THE REACT ID AS THIS IS DIFFERENT FOR EACH CAR ON THE WEBPAGE
-		# <ul class="card__body-keyinfo" data-reactid="18">
-	 #   <li data-reactid="19">2016</li>
-	 #   <li data-reactid="20">2.0 Diesel</li>
-	 #   <li data-reactid="21">115,000 mi</li>
-	 #   <li data-reactid="22">1 day</li>
-	 #   <li data-reactid="23">Donegal</li>
-		# </ul>
+	info_container = container.findAll("ul", {"class":"card__body-keyinfo"})
+	info = info_container[0].text
 
-	milage_container = container.findAll("ul", {"class":"card__body-keyinfo"})
-	milage = milage_container[0].text
+	miles = info.split('Diesel',1)
+	milage = miles[1]
+	miles2 = milage.split(' ',1)
 
-	location_container = container.findAll("ul", {"class":"card__body-keyinfo"})
-	location = location_container[0].text
+	type_, *vals = info.split('days')
+	location = vals[0]
 
-	price_container = container.findAll("ul", {"class":"card__body-keyinfo"})
+	price_container = container.findAll("p", {"class":"card__price"})
 	price = price_container[0].text
 
-	print("description: " + description)
-	print("milage: " + milage)
-	print("location: " + location)
-	print("price: " + price)
+	print("Description: " + description)
+	print("Milage: " + miles2[0])
+	print("Location: " + location)
+	print("Price: " + price)
+	print(" ")
+	# print("info: " + info)
 
-	f.write(description + "," +milage + "," +location + "," +price +"\n")
+	f.write(description + "," +miles2[0] + "," +location + "," +price +"\n")
